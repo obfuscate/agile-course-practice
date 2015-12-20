@@ -66,7 +66,8 @@ public class Vector3ViewModelLoggerParametrizedTest {
         SetterVectorInViewModel.setFirstVector(firstVector, viewModel);
         SetterVectorInViewModel.setSecondVector(secondVector, viewModel);
 
-        viewModel.compute(operation);
+        viewModel.setOperation(operation);
+        viewModel.compute();
 
         String outputMessage = getOutputMessage(operation);
 

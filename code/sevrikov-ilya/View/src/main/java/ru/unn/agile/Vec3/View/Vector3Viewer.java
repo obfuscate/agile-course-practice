@@ -7,6 +7,8 @@ import ru.unn.agile.Vec3.Infrastructure.Vector3TxtLogger;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -65,7 +67,7 @@ public final class Vector3Viewer {
             public void actionPerformed(final ActionEvent e) {
                 backBind();
 
-                viewModel.compute((Vector3Operation) cmbActionList.getSelectedItem());
+                viewModel.compute();
 
                 bind();
             }
@@ -75,6 +77,83 @@ public final class Vector3Viewer {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 listLog.setVisible(cbShowLog.isSelected());
+            }
+        });
+
+        cmbActionList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                backBind();
+
+                viewModel.operationIsChanged();
+
+                bind();
+            }
+        });
+
+        txtCoordX0.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                backBind();
+
+                viewModel.checkCoordX0IsChanged();
+
+                bind();
+            }
+        });
+
+        txtCoordY0.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                backBind();
+
+                viewModel.checkCoordY0IsChanged();
+
+                bind();
+            }
+        });
+
+        txtCoordZ0.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                backBind();
+
+                viewModel.checkCoordZ0IsChanged();
+
+                bind();
+            }
+        });
+
+        txtCoordX1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                backBind();
+
+                viewModel.checkCoordX1IsChanged();
+
+                bind();
+            }
+        });
+
+        txtCoordY1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                backBind();
+
+                viewModel.checkCoordY1IsChanged();
+
+                bind();
+            }
+        });
+
+        txtCoordZ1.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(final FocusEvent e) {
+                backBind();
+
+                viewModel.checkCoordZ1IsChanged();
+
+                bind();
             }
         });
     }
@@ -92,6 +171,8 @@ public final class Vector3Viewer {
         viewModel.setCoordX1(txtCoordX1.getText());
         viewModel.setCoordY1(txtCoordY1.getText());
         viewModel.setCoordZ1(txtCoordZ1.getText());
+
+        viewModel.setOperation((Vector3Operation) cmbActionList.getSelectedItem());
     }
 
     private void bind() {
@@ -102,6 +183,8 @@ public final class Vector3Viewer {
         txtCoordX1.setText(viewModel.getCoordX1());
         txtCoordY1.setText(viewModel.getCoordY1());
         txtCoordZ1.setText(viewModel.getCoordZ1());
+
+        cmbActionList.setSelectedItem(viewModel.getOperation());
 
         txtResult.setText(viewModel.getResultOfLastAction());
         txtStatus.setText(viewModel.getStatus());

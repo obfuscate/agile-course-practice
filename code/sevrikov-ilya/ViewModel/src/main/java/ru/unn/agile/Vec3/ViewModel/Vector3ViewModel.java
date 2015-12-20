@@ -15,12 +15,24 @@ public class Vector3ViewModel {
     private String coordY1 = "0.0";
     private String coordZ1 = "0.0";
 
+    private Vector3Operation operation = Vector3Operation.GET_NORM_FIRST_VECTOR;
+
+    private boolean isCoordX0Changed = false;
+    private boolean isCoordY0Changed = false;
+    private boolean isCoordZ0Changed = false;
+    private boolean isCoordX1Changed = false;
+    private boolean isCoordY1Changed = false;
+    private boolean isCoordZ1Changed = false;
+    private boolean isOpertionIsChanged = false;
+
     private String resultOfLastAction = "";
     private String status = Vector3ViewModelStatus.OK;
 
     private final DecimalFormat formatter;
 
     private final Vector3ILogger logger;
+    private static final String MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED
+            = "%1$s is changed, it is '%2$s' now";
 
     public Vector3ViewModel(final Vector3ILogger logger) {
         if (logger == null) {
@@ -33,50 +45,62 @@ public class Vector3ViewModel {
     }
 
     public void setCoordX0(final String coordX0) {
+        isCoordX0Changed = !this.coordX0.equals(coordX0);
         this.coordX0 = coordX0;
     }
 
     public void setCoordX0(final double coordX0) {
+        isCoordX0Changed = !this.coordX0.equals(Double.toString(coordX0));
         this.coordX0 = Double.toString(coordX0);
     }
 
     public void setCoordY0(final String coordY0) {
+        isCoordY0Changed = !this.coordY0.equals(coordY0);
         this.coordY0 = coordY0;
     }
 
     public void setCoordY0(final double coordY0) {
+        isCoordY0Changed = !this.coordY0.equals(Double.toString(coordY0));
         this.coordY0 = Double.toString(coordY0);
     }
 
     public void setCoordZ0(final String coordZ0) {
+        isCoordZ0Changed = !this.coordZ0.equals(coordZ0);
         this.coordZ0 = coordZ0;
     }
 
     public void setCoordZ0(final double coordZ0) {
+        isCoordZ0Changed = !this.coordZ0.equals(Double.toString(coordZ0));
         this.coordZ0 = Double.toString(coordZ0);
     }
 
     public void setCoordX1(final String coordX1) {
+        isCoordX1Changed = !this.coordX1.equals(coordX1);
         this.coordX1 = coordX1;
     }
 
     public void setCoordX1(final double coordX1) {
+        isCoordX1Changed = !this.coordX1.equals(Double.toString(coordX1));
         this.coordX1 = Double.toString(coordX1);
     }
 
     public void setCoordY1(final String coordY1) {
+        isCoordY1Changed = !this.coordY1.equals(coordY1);
         this.coordY1 = coordY1;
     }
 
     public void setCoordY1(final double coordY1) {
+        isCoordY1Changed = !this.coordY1.equals(Double.toString(coordY1));
         this.coordY1 = Double.toString(coordY1);
     }
 
     public void setCoordZ1(final String coordZ1) {
+        isCoordZ1Changed = !this.coordZ1.equals(coordZ1);
         this.coordZ1 = coordZ1;
     }
 
     public void setCoordZ1(final double coordZ1) {
+        isCoordZ1Changed = !this.coordZ1.equals(Double.toString(coordZ1));
         this.coordZ1 = Double.toString(coordZ1);
     }
 
@@ -136,7 +160,16 @@ public class Vector3ViewModel {
                 + "Result: %9$s.";
     }
 
-    public void compute(final Vector3Operation operation) {
+    public void setOperation(final Vector3Operation operation) {
+        isOpertionIsChanged = !this.operation.equals(operation);
+        this.operation = operation;
+    }
+
+    public Vector3Operation getOperation() {
+        return operation;
+    }
+
+    public void compute() {
         switch (operation) {
             case GET_NORM_FIRST_VECTOR:     getNormOfFirstVector();
                                             break;
@@ -163,6 +196,49 @@ public class Vector3ViewModel {
                            coordX0, coordY0, coordZ0,
                            coordX1, coordY1, coordZ1,
                            resultOfLastAction);
+    }
+
+    public void operationIsChanged() {
+        if (isOpertionIsChanged) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED,
+                    "Operation", operation.toString());
+        }
+    }
+
+    public void checkCoordX0IsChanged() {
+        if (isCoordX0Changed) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED, "Coord x0", coordX0);
+        }
+    }
+
+    public void checkCoordY0IsChanged() {
+        if (isCoordY0Changed) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED, "Coord y0", coordY0);
+        }
+    }
+
+    public void checkCoordZ0IsChanged() {
+        if (isCoordZ0Changed) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED, "Coord z0", coordZ0);
+        }
+    }
+
+    public void checkCoordX1IsChanged() {
+        if (isCoordX1Changed) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED, "Coord x1", coordX1);
+        }
+    }
+
+    public void checkCoordY1IsChanged() {
+        if (isCoordY1Changed) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED, "Coord y1", coordY1);
+        }
+    }
+
+    public void checkCoordZ1IsChanged() {
+        if (isCoordZ1Changed) {
+            logger.pushMessage(MESSAGE_FORMAT_WHEN_STATE_IS_CHANGED, "Coord z1", coordZ1);
+        }
     }
 
     public String getResultOfLastAction() {
